@@ -115,6 +115,22 @@ test('display filename prefixes for failed test stack traces in subdirs', functi
 		});
 });
 
+test('--no-babel', function (t) {
+	t.plan(4);
+
+	var api = new Api([path.join(__dirname, 'fixture/no-babel.js')], {
+		noBabel: true
+	});
+
+	api.run()
+		.then(function () {
+			t.notOk(api.options.babel);
+			t.is(api.passCount, 0);
+			t.is(api.failCount, 1);
+			t.match(api.errors[0].error.message, /SyntaxError: Unexpected token (export|async)/);
+		});
+});
+
 test('fail-fast mode', function (t) {
 	t.plan(5);
 
